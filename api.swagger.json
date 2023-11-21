@@ -1,0 +1,250 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Exodus Orbitals API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://{{base_url}}"
+        }
+    ],
+    "paths": {
+        "/satellites": {
+            "get": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "satellites",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "data": [
+                                    {
+                                        "description": "capabilities summary of SAT1",
+                                        "name": "SAT1",
+                                        "norad_id": 1,
+                                        "tle1": "1 99999U          23335.27943716  .00000012  00000-0  50466-6 0 00003",
+                                        "tle2": "2 99999 091.0460 134.3637 0004314 159.3440 179.3713 15.22382698009299",
+                                        "type": "RGB"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/instruments": {
+            "get": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "instruments",
+                "parameters": [
+                    {
+                        "name": "norad_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "data": [
+                                    {
+                                        "instruments": [
+                                            {
+                                                "d": 0.0225,
+                                                "f": 0.58,
+                                                "fov": 2.22,
+                                                "id": 1,
+                                                "pixel": 5.5e-06,
+                                                "sensor": [
+                                                    4096,
+                                                    4096
+                                                ],
+                                                "type": "imager"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/times_on_target": {
+            "get": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "times_on_target",
+                "parameters": [
+                    {
+                        "name": "norad_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "1"
+                    },
+                    {
+                        "name": "instrument_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": "1"
+                    },
+                    {
+                        "name": "lng",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "-79.6"
+                    },
+                    {
+                        "name": "lat",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "43.7"
+                    },
+                    {
+                        "name": "nlt",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "2023-03-03 03:27:26"
+                    },
+                    {
+                        "name": "net",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "2023-03-01 03:27:26"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "target_passes": [
+                                    [
+                                        "2023-03-02 13:06:29",
+                                        "2023-03-02 13:06:31"
+                                    ]
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create_mission": {
+            "post": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "create_mission",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "user": "{{user}}",
+                                    "api_key": "{{user}}",
+                                    "net": "2023-03-01 00:00:00",
+                                    "nlt": "2023-03-03 03:27:28",
+                                    "description": "Test mission description",
+                                    "norad_id": 1,
+                                    "instrument_id": 1,
+                                    "lon": "-79.6",
+                                    "lat": "43.7",
+                                    "mission_type": "Hyperspectral"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "data_key": [
+                                    "{{data_key}}"
+                                ],
+                                "date_available": [
+                                    "2023-03-02 13:21:31"
+                                ],
+                                "status": "OK"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/data_download": {
+            "get": {
+                "tags": [
+                    "General"
+                ],
+                "summary": "data_download",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "{{user}}"
+                    },
+                    {
+                        "name": "api_key",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "{{api_key}}"
+                    },
+                    {
+                        "name": "data_key",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "b14c55bbce153b954b1f2b77b13563cb89f361793d5f2627d54744340038a8e2"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "data_url": "https://s3obj.exodus.aws.com/product_testuser123_8f756740-4e3f-48b8-a15f-7eb944708290.zip",
+                                "logs_url": "",
+                                "status": "OK"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
