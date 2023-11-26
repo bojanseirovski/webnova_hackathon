@@ -1,11 +1,11 @@
 import axios from "axios";
 
-export const userName = "testuser123";
-export const apiKey = "Pf4y860leVsTLUWY5V7xFWK3sWznyj4N";
+export const userName = "";
+export const apiKey = "";
 
 export const api = axios.create({
     withCredentials: false,
-    baseURL: "http://45.33.41.62",
+    baseURL: "",
 });
 
 const errorHandler = (error) => {
