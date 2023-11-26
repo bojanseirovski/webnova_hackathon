@@ -32,5 +32,6 @@ $dateAvailable = $mission->getDateAvailable();
 
 //  get the data information
 $dataDownload = $satAPI->getDataDownload($dataKey);
+
 // download an archive with the mission data
 var_dump($dataDownload->getDataUrl());
