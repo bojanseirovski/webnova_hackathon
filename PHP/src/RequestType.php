@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * SDK for the satellite API
+ * Request types
+ *
+ * Bojan Seirovski
+ * bojan.seirovski@exodusorbitals.com
+ * Exodus Orbitals
+ */
 namespace Exodus\src;
 
 class RequestType {

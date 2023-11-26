@@ -1,9 +1,20 @@
 <?php
-
+/**
+ * SDK for the satellite API
+ *
+ * Bojan Seirovski
+ * bojan.seirovski@exodusorbitals.com
+ * Exodus Orbitals
+ */
 namespace Exodus;
 
 use Exodus\src\BaseSdk;
 use Exodus\src\RequestType;
+use Exodus\Response\Satellite;
+use Exodus\Response\Instrument;
+use Exodus\Response\DataDownload;
+use Exodus\Response\TimesOnTarget;
+use Exodus\Response\Mission;
 
 class SDK extends BaseSdk
 {
@@ -23,13 +34,13 @@ class SDK extends BaseSdk
     /**
      * getSatellites
      *
-     * @return array
+     * @return array[Satellite]
      */
     public function getSatellites(): array
     {
         $endpoint = "satellites";
-        return $this->makeRequest($endpoint, RequestType::GET);
-
+        $satellitesJson = $this->makeRequest($endpoint, RequestType::GET);
+        return $this->getSatelliteObjects($satellitesJson);
     }
 
     /**
@@ -44,8 +55,8 @@ class SDK extends BaseSdk
         $data = [
             "norad_id" => $noradId,
         ];
-        return $this->makeRequest($endpoint, RequestType::GET, $data);
-
+        $instrumentJson = $this->makeRequest($endpoint, RequestType::GET, $data);
+        return $this->getInstrumentObjects($instrumentJson);
     }
 
     /**
@@ -70,8 +81,9 @@ class SDK extends BaseSdk
             "nlt" => $nlt,
             "net" => $net,
         ];
-        return $this->makeRequest($endpoint, RequestType::GET, $data);
 
+        $jsonTimes = $this->makeRequest($endpoint, RequestType::GET, $data);
+        return $this->getTimesOnTargetObj($jsonTimes);
     }
 
     /**
@@ -86,9 +98,9 @@ class SDK extends BaseSdk
      * @param string $nlt
      * @param string $net
      * @param string $description
-     * @return array
+     * @return Mission
      */
-    public function createMission(string $missionType, int $noradId, int $instrumentId, string $lat, string $lng, string $nlt, string $net, string $description): array
+    public function createMission(string $missionType, int $noradId, int $instrumentId, string $lat, string $lng, string $nlt, string $net, string $description): Mission
     {
         $endpoint = "create_mission";
         $data = [
@@ -97,23 +109,24 @@ class SDK extends BaseSdk
             "norad_id" => $noradId,
             "instrument_id" => $instrumentId,
             "lat" => $lat,
-            "lng" => $lng,
+            "lon" => $lng,
             "nlt" => $nlt,
             "net" => $net,
             "mission_type"=>$missionType,
             "description" => $description,
         ];
-        return $this->makeRequest($endpoint, RequestType::POST, $data);
+        $jsonMission = $this->makeRequest($endpoint, RequestType::POST, $data);
 
+        return $this->getMissionObj($jsonMission);
     }
 
     /**
      * getDataDownload
      *
      * @param string $dataKey
-     * @return array
+     * @return DataDownload
      */
-    public function getDataDownload(string $dataKey): array
+    public function getDataDownload(string $dataKey): DataDownload
     {
         $endpoint = "data_download";
         $data = [
@@ -121,8 +134,77 @@ class SDK extends BaseSdk
             "api_key" => $this->apiKey,
             "data_key" => $dataKey,
         ];
-        return $this->makeRequest($endpoint, RequestType::GET, $data);
-
+        $jsonDataDownload = $this->makeRequest($endpoint, RequestType::GET, $data);
+        return $this->getDataDownloadObj($jsonDataDownload);
     }
 
+    /**
+     * getSatelliteObjects
+     *
+     * @param array $resp
+     * @return array
+     */
+    private function getSatelliteObjects(array $resp): array
+    {
+        $satObjects = [];
+        foreach ($resp as $sat) {
+            $satOb = new Satellite($sat->description, $sat->name, $sat->norad_id, $sat->tle1, $sat->tle2, $sat->type);
+            $satObjects[] = $satOb;
+        }
+        return $satObjects;
+    }
+
+    /**
+     * getInstrumentObjects
+     *
+     * @param array $resp
+     * @return array
+     */
+    private function getInstrumentObjects(array $resp): array
+    {
+        $instrumentObjects = [];
+        foreach ($resp[0]->instruments as $inst) {
+            $instOb = new Instrument($inst->d, $inst->f, $inst->fov, $inst->id, $inst->pixel, $inst->sensor, $inst->type);
+            $instrumentObjects[] = $instOb;
+        }
+        return $instrumentObjects;
+    }
+
+    /**
+     * getTimesOnTargetObj
+     *
+     * @param array|\stdClass $resp
+     * @return array
+     */
+    private function getTimesOnTargetObj(array|\stdClass $resp): array
+    {
+        $allTmsObj = [];
+        foreach ($resp->target_passes as $times) {
+            $tms = new TimesOnTarget($times[0], $times[1]);
+            $allTmsObj[] = $tms;
+        }
+        return $allTmsObj;
+    }
+
+    /**
+     * getMissionObj
+     *
+     * @param \stdClass $resp
+     * @return Exodus\Response\Mission
+     */
+    private function getMissionObj($resp): Mission
+    {
+        return new Mission($resp->data_key[0], $resp->date_available[0], $resp->status);
+    }
+
+    /**
+     * getDataDownloadObj
+     *
+     * @param \stdClass $resp
+     * @return DataDownload
+     */
+    private function getDataDownloadObj($resp): DataDownload
+    {
+        return new DataDownload($resp->data_url, $resp->logs_url, $resp->status);
+    }
 }

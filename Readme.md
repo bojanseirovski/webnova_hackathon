@@ -1,6 +1,7 @@
-# Exodus Orbital PHP SDK for the satellite API
+# Exodus Orbital SDK toolkit
 
-## Please refer to the ```example.php``` file
+## Intro
+This repository contains the SDK to allow easier interaction with Exodus Orbitals's API. For more details about the API, refer to the swagger file.
 
 ## Valid flow
 The following is a valid flow to create a mission:
@@ -10,5 +11,9 @@ The following is a valid flow to create a mission:
 - from that response, use the dates to create a mission - the response contains a data_key and date when the data will be available
 - using the data key, get the data URL, this will allow you to download the data
 
-## Response objects
-The response objects are there for convenience, transforming the JSON to objects.
+## Supported languages
+So far, there is only support for Python, PHP and JavaScript/TypeScript(ideally React.js). 
+
+
+Exodus Orbitals
+https://exodusorbitals.com
