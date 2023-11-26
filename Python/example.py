@@ -27,7 +27,7 @@ instrumentId = instruments[0].id
 # get times on target
 timesOnTarget = satApi.get_times_on_target(noradId, instrumentId, lon, lat, net, nlt)
 
-# create a mission, schedule data retrieval
+# create a mission, schedule data retrieval according to the date_available value
 mission = satApi.create_mission(
     noradId,
     instrumentId,

@@ -16,16 +16,21 @@ $missionDescription = 'Test Mission';
 
 $satAPI = new SDK($username, $apiKey, $baseUrl);
 
+// get available satellites
 $satellites = $satAPI->getSatellites();
-
+// get available instruments for the satellite with norad_id
 $instruments = $satAPI->getInstruments($noradId);
 
+// get times on target
 $times = $satAPI->getTimesOnTarget($noradId,1,$lat, $lon,$nlt, $net);
 
+// create a mission, schedule data retrieval according to the date_available value
 $mission = $satAPI->createMission($missionType, $noradId, 1, $lat, $lon, $nlt, $net, $missionDescription);
 
 $dataKey = $mission->getDataKey();
 $dateAvailable = $mission->getDateAvailable();
 
+//  get the data information
 $dataDownload = $satAPI->getDataDownload($dataKey);
+// download an archive with the mission data
 var_dump($dataDownload->getDataUrl());
