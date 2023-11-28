@@ -3,9 +3,9 @@ require_once 'autoload.php';
 
 use Exodus\SDK;
 
-$username = "testuser123";
-$baseUrl = "http://45.33.41.62/";
-$apiKey = "tJ9Izf58Somi3dN02cwsopRLDkf7QtSLu6Ag668kr4M";
+$username = "";
+$baseUrl = "";
+$apiKey = "";
 $noradId = 1;
 $lon = '-79.6';
 $lat = '43.7';
