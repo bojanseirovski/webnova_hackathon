@@ -1,73 +1,123 @@
-import { api } from "./configs/axiosConfigs"
-import { defineCancelApiObject } from "./configs/utils"
+import axios from 'axios';
+import configData from "/configs/axiosConfigs"
 
-export const ExodusAPI = {
-    getSatellites: async function (cancel = false) {
-        const response = await api.request({
-            url: '/satellites',
-            method: "GET",
-            signal: cancel ? cancelApiObject[this.get.name].handleRequestCancellation().signal : undefined,
-        })
-        return response.data;
+const api = axios.create({
+    baseURL: configData.baseUrl,
+    headers: configData.headers,
+});
+
+api.interceptors.request.use(
+    (config) => {
+        return config;
     },
-    getSatellites: async function (noradId, cancel = false) {
-        const response = await api.request({
-            url: '/instruments',
-            method: "GET",
-            params:{
-                norad_id: noradId,
-            },
-            signal: cancel ? cancelApiObject[this.get.name].handleRequestCancellation().signal : undefined,
-        })
-        return response.data;
-    },
-    getTimesOnTarget: async function (noradId, instrumentId, lng, lat, nlt, net, cancel = false) {
-        const response = await api.request({
-            url: '/instruments',
-            method: "GET",
-            params:{
-                norad_id: noradId,
-                instrument_id: instrumentId,
-                lng:lng,
-                lat:lat,
-                nlt:nlt,
-                net:net
-            },
-            signal: cancel ? cancelApiObject[this.get.name].handleRequestCancellation().signal : undefined,
-        })
-        return response.data;
-    },
-    createMission: async function (username, apiKey, noradId, instrumentId, lng, lat, nlt, net, cancel = false) {
-        const response = await api.request({
-            url: '/create_mission',
-            method: "POST",
-            data:{
-                user:username,
-                api_key:apiKey,
-                norad_id: noradId,
-                instrument_id: instrumentId,
-                lng:lng,
-                lat:lat,
-                nlt:nlt,
-                net:net
-            },
-            signal: cancel ? cancelApiObject[this.create.name].handleRequestCancellation().signal : undefined,
-        });
-        return response.data;
-    },
-    getDataDownload: async function (username, apiKey, dataKey, cancel = false) {
-        const response = await api.request({
-            url: '/data_download',
-            method: "GET",
-            params:{
-                user: username,
-                api_key: apiKey,
-                data_key: dataKey,
-            },
-            signal: cancel ? cancelApiObject[this.get.name].handleRequestCancellation().signal : undefined,
-        })
-        return response.data;
+    (error) => {
+        return Promise.reject(error);
     }
+);
+
+api.interceptors.response.use(
+    (res) => {
+        return res;
+    },
+    async (err) => {
+        const originalConfig = err.config;
+
+        if (err.response) {
+            // Access Token was expired
+            if (err.response.status === 401 && !originalConfig._retry) {
+                originalConfig._retry = true;
+
+                try {
+                    return api(originalConfig);
+                } catch (_error) {
+                    if (_error.response && _error.response.data) {
+                        return Promise.reject(_error.response.data);
+                    }
+
+                    return Promise.reject(_error);
+                }
+            }
+
+            if (err.response.status === 403 && err.response.data) {
+                return Promise.reject(err.response.data);
+            }
+        }
+
+        return Promise.reject(err);
+    }
+);
+
+export default api;
+
+export const getAvailableSatellites = (done, err) => {
+    api.get("/satellites")
+    .then(response => {
+        if (done) {
+            done(response.data);
+        }
+    })
+    .catch(error => {
+        if (err) {
+            err();
+        }
+    });
 }
 
-const cancelApiObject = defineCancelApiObject(ExodusAPI);
+export const getSatellites = (noradId, done, err) => {
+    api.get("/instruments", {params: {norad_id: noradId}})
+    .then(response => {
+        if (done) {
+            done(response.data);
+        }
+    })
+    .catch(error => {
+        if (err) {
+            err();
+        }
+    });
+}
+
+export const getTimesOnTarget = (noradId, instrumentId, lng, lat, nlt, net, done, err) => {
+    api.get("/times_on_target", {params: {norad_id: noradId, instrument_id: instrumentId, lon: lng, lat:lat, nlt:nlt, net:net}})
+    .then(response => {
+        if (done) {
+            done(response.data);
+        }
+    })
+    .catch(error => {
+        if (err) {
+            err();
+        }
+    });
+}
+
+export const createMission = (noradId, instrumentId, lng, lat, nlt, net, done, err) => {
+    let username = configData.userName;
+    let apiKey = configData.apiKey;
+    api.post("/create_mission", {params: {user: username, api_key:apiKey, norad_id: noradId, instrument_id: instrumentId, lon: lng, lat:lat, nlt:nlt, net:net}})
+    .then(response => {
+        if (done) {
+            done(response.data);
+        }
+    })
+    .catch(error => {
+        if (err) {
+            err();
+        }
+    });
+}
+
+
+export const getDataDownload = (dataKey, done, err) => {
+    api.get("/data_download", {params: {data_key: dataKey, user: username, api_key:apiKey}})
+    .then(response => {
+        if (done) {
+            done(response.data);
+        }
+    })
+    .catch(error => {
+        if (err) {
+            err();
+        }
+    });
+}
