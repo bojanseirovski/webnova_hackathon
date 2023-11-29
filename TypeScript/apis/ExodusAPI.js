@@ -63,7 +63,7 @@ export const getAvailableSatellites = (done, err) => {
     });
 }
 
-export const getSatellites = (noradId, done, err) => {
+export const getSatelliteInstruments = (noradId, done, err) => {
     api.get("/instruments", {params: {norad_id: noradId}})
     .then(response => {
         if (done) {
@@ -109,7 +109,7 @@ export const createMission = (noradId, instrumentId, lng, lat, nlt, net, done, e
 
 
 export const getDataDownload = (dataKey, done, err) => {
-    api.get("/data_download", {params: {data_key: dataKey, user: username, api_key:apiKey}})
+    api.get("/data_download", {params: {data_key: dataKey, user: configData.userName, api_key:configData.apiKey}})
     .then(response => {
         if (done) {
             done(response.data);
