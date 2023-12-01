@@ -38,7 +38,7 @@ class SDK extends BaseSdk
      */
     public function getSatellites(): array
     {
-        $endpoint = "satellites";
+        $endpoint = "/satellites";
         $satellitesJson = $this->makeRequest($endpoint, RequestType::GET);
         return $this->getSatelliteObjects($satellitesJson);
     }
@@ -51,7 +51,7 @@ class SDK extends BaseSdk
      */
     public function getInstruments(int $noradId): array
     {
-        $endpoint = "instruments";
+        $endpoint = "/instruments";
         $data = [
             "norad_id" => $noradId,
         ];
@@ -72,7 +72,7 @@ class SDK extends BaseSdk
      */
     public function getTimesOnTarget(int $noradId, int $instrumentId, string $lat, string $lng, string $nlt, string $net): array
     {
-        $endpoint = "times_on_target";
+        $endpoint = "/times_on_target";
         $data = [
             "norad_id" => $noradId,
             "instrument_id" => $instrumentId,
@@ -102,7 +102,7 @@ class SDK extends BaseSdk
      */
     public function createMission(string $missionType, int $noradId, int $instrumentId, string $lat, string $lng, string $nlt, string $net, string $description): Mission
     {
-        $endpoint = "create_mission";
+        $endpoint = "/create_mission";
         $data = [
             "api_key" => $this->apiKey,
             "user"=>$this->username,
@@ -128,7 +128,7 @@ class SDK extends BaseSdk
      */
     public function getDataDownload(string $dataKey): DataDownload
     {
-        $endpoint = "data_download";
+        $endpoint = "/data_download";
         $data = [
             "user" => $this->username,
             "api_key" => $this->apiKey,
@@ -136,17 +136,6 @@ class SDK extends BaseSdk
         ];
         $jsonDataDownload = $this->makeRequest($endpoint, RequestType::GET, $data);
         return $this->getDataDownloadObj($jsonDataDownload);
-    }
-
-    /**
-     * downloadFile
-     *
-     * @param string $filename
-     * @return void
-     */
-    public function downloadFile(string $filename, string $bucket, string $sKey, string $aKey): void
-    {
-
     }
 
     /**
