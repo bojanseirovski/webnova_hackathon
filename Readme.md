@@ -24,6 +24,8 @@ The following is a valid flow to create a mission:
 - from that response, use the dates to create a mission, use the ```/create_mission``` endpoint - the response contains a data_key and date when the data will be available
 - using the data key, get the data URL via the ```/data_download``` API endpoint, this will allow you to download the data. The API returns a Zip archive URL, hosted on AWS S3. You need to download the Zip archive, extract and use any data within the file.
 
+### Have a look at the examples in the SDK, each example demonstrates how to use the APIs
+
 ## Usage
 Use any of the SDKs as you wish, and include them in your project accordingly.
 In order to create the SKD object you will need:
