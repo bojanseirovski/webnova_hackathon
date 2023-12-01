@@ -29,3 +29,6 @@ In order to create the SKD object you will need:
 - API key
 - username
 These can be found and set in the config file ```apis/configs/axiosConfig.json```
+
+## Demo Application
+Please refer to https://github.com/bojanseirovski/webnova_hackathon_demo, it's a sample application that uses the React.js SDK
