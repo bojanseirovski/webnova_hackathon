@@ -1,6 +1,11 @@
 import axios from 'axios';
 import configData from "./configs/axiosConfig.json"
-
+/**
+ * SDK for the satellite API
+ * Bojan Seirovski
+ * bojan.seirovski@exodusorbitals.com
+ * Exodus Orbitals
+ */
 const api = axios.create({
     baseURL: configData.baseUrl,
     headers: configData.headers,

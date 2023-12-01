@@ -22,7 +22,7 @@ The following is a valid flow to create a mission:
 - use the ```norad_id``` to get all instruments via the ```/instruments``` API endpoint  - the response is a list of instruments for the satellite
 - knowing the ```norad_id``` and the ```instrument.id``` (from the ```/instruments``` endpoint), get all times when that satellite is over a target (lat, lng) in a time range via the ```/times_on_target``` API endpoint - the response is a list of timestamps/dates
 - from that response, use the dates to create a mission, use the ```/create_mission``` endpoint - the response contains a data_key and date when the data will be available
-- using the data key, get the data URL via the ```/data_download``` API endpoint, this will allow you to download the data
+- using the data key, get the data URL via the ```/data_download``` API endpoint, this will allow you to download the data. The API returns a Zip archive URL, hosted on AWS S3. You need to download the Zip archive, extract and use any data within the file.
 
 ## Usage
 Use any of the SDKs as you wish, include them in your project accordingly.
@@ -30,11 +30,31 @@ In order to create the SKD object you will need:
 - base_url
 - API key
 - username
+- AWS S3 credentials
 
 **These can be obtained from Exodus Orbitals.**
 
 ## Supported languages
 So far, there is only support for Python, PHP and JavaScript/TypeScript(ideally React.js). 
+
+
+## For the curious - parameter description
+
+- norad_id - https://en.wikipedia.org/wiki/Satellite_Catalog_Number
+- tle1, tle2 - https://en.wikipedia.org/wiki/Two-line_element_set
+- type - RGB for now, we are using a satellite camera
+- nlt - Not Later Than
+- net - Not Earlier Than
+- lat - Latitude
+- lon, lng - Longitude
+- mission_type - **Hyperspectral(use this one)**, RGB Imager, Multispectral Imager...
+- d - distance
+- fov - Field Of View - https://www.sciencedirect.com/topics/earth-and-planetary-sciences/field-of-view
+- pixel - Imager/camera pixels size
+- sensor - sensor data, for an imager, maximum resolution
+- type (instrument type) - see mission type, dafult value is **imager**
+
+
 
 ## TODO
 In the future expect separate repos for each SDK (React, Python, PHP...)

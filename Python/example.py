@@ -1,9 +1,15 @@
 from sdk import exodusSdk
-from pprint import pprint
+from pathlib import Path
+import time
+from datetime import datetime
+
 
 BASE_URL = ''
-USER = ''
+USER = 'testuser123'
 API_KEY = ''
+AWS_S3_ACCESS_KEY = ''
+AWS_S3_SECRET_KEY = ''
+AWS_S3_BUCKET = 'exodusorbitals'
 
 lon = '-79.6'
 lat = '43.7'
@@ -47,3 +53,10 @@ satDataInfo = satApi.get_download(satDataKey)
 
 # download an archive with the mission data
 dataUrl = satDataInfo.data_url
+
+# sleep 2 seconds, wait for file to be generated on S3
+time.sleep(2)
+#download zip file
+p = Path(dataUrl)
+now = datetime.now()
+satApi.download_file('downlink/'+p.name, AWS_S3_ACCESS_KEY, AWS_S3_SECRET_KEY, AWS_S3_BUCKET, 'FILE_NAME_'+now.strftime("%m-%d-%Y-%H-%M-%S") +'.zip')

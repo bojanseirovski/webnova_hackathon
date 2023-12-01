@@ -24,5 +24,5 @@ foreach (glob($lib . "*.php") as $filename) {
 foreach (glob($responseDir . "*.php") as $filename) {
     include $filename;
 }
-
+@include "vendor/autoload.php";
 include "SDK.php";

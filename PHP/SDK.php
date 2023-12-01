@@ -139,6 +139,17 @@ class SDK extends BaseSdk
     }
 
     /**
+     * downloadFile
+     *
+     * @param string $filename
+     * @return void
+     */
+    public function downloadFile(string $filename, string $bucket, string $sKey, string $aKey): void
+    {
+
+    }
+
+    /**
      * getSatelliteObjects
      *
      * @param array $resp

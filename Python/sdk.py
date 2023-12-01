@@ -1,9 +1,10 @@
 import requests
-from response_objects.satellite import Satellite
-from response_objects.instrument import Instrument
-from response_objects.mission import Mission
-from response_objects.times_on_target import TimesOnTarget
-from response_objects.data_download import DataDownload
+import boto3
+from data_objects.satellite import Satellite
+from data_objects.instrument import Instrument
+from data_objects.mission import Mission
+from data_objects.times_on_target import TimesOnTarget
+from data_objects.data_download import DataDownload
 
 '''
 SDK for the satellite API
@@ -65,6 +66,10 @@ class exodusSdk:
         response = requests.get(f"{self.base_url}/data_download", params=data)
         jsonData = response.json()
         return self.__get_download(jsonData)
+
+    def download_file(self, filename, access_key, secret_key, bucket, save_to_file_name):
+        s3 = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+        s3.download_file(bucket, filename, save_to_file_name)
 
     # private methods, helpers
     def __get_satellites(self, response):

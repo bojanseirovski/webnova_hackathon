@@ -20,6 +20,7 @@ The following is a valid flow to create a mission:
 - knowing the ```norad_id``` and the ```instrument.id``` (from the ```/instruments``` endpoint ), get all times when that satellite is over a target (lat, lng) in a time range via the ```/times_on_target``` API endpoint - the response is a list of timestamps/dates
 - from that response, use the dates to create a mission, use the ```/create_mission``` endpoint - the response contains a data_key and date when the data will be available
 - using the data key, get the data URL via the ```/data_download``` API endpoint, this will allow you to download the data if the mission finished successfully
+- the mission data is hosted on a AWS S3
 
 
 ## Setup
