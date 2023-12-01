@@ -45,8 +45,8 @@ So far, there is only support for Python, PHP, and JavaScript/TypeScript(ideally
 - type - RGB for now, we are using a satellite camera
 - nlt - Not Later Than, timestamp
 - net - Not Earlier Than, timestamp
-- lat - Latitude
-- lon, lng - Longitude
+- lat - Latitude, float
+- lon, lng - Longitude, float
 - mission_type - **Hyperspectral(use this one)**, RGB Imager, Multispectral Imager...
 - d - distance
 - fov - Field Of View - https://www.sciencedirect.com/topics/earth-and-planetary-sciences/field-of-view
