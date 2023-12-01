@@ -25,7 +25,7 @@ The following is a valid flow to create a mission:
 - using the data key, get the data URL via the ```/data_download``` API endpoint, this will allow you to download the data. The API returns a Zip archive URL, hosted on AWS S3. You need to download the Zip archive, extract and use any data within the file.
 
 ## Usage
-Use any of the SDKs as you wish, include them in your project accordingly.
+Use any of the SDKs as you wish, and include them in your project accordingly.
 In order to create the SKD object you will need:
 - base_url
 - API key
@@ -35,7 +35,7 @@ In order to create the SKD object you will need:
 **These can be obtained from Exodus Orbitals.**
 
 ## Supported languages
-So far, there is only support for Python, PHP and JavaScript/TypeScript(ideally React.js). 
+So far, there is only support for Python, PHP, and JavaScript/TypeScript(ideally React.js). 
 
 
 ## For the curious - parameter description
@@ -43,16 +43,16 @@ So far, there is only support for Python, PHP and JavaScript/TypeScript(ideally 
 - norad_id - https://en.wikipedia.org/wiki/Satellite_Catalog_Number
 - tle1, tle2 - https://en.wikipedia.org/wiki/Two-line_element_set
 - type - RGB for now, we are using a satellite camera
-- nlt - Not Later Than
-- net - Not Earlier Than
-- lat - Latitude
-- lon, lng - Longitude
+- nlt - Not Later Than, timestamp
+- net - Not Earlier Than, timestamp
+- lat - Latitude, float
+- lon, lng - Longitude, float
 - mission_type - **Hyperspectral(use this one)**, RGB Imager, Multispectral Imager...
 - d - distance
 - fov - Field Of View - https://www.sciencedirect.com/topics/earth-and-planetary-sciences/field-of-view
 - pixel - Imager/camera pixels size
 - sensor - sensor data, for an imager, maximum resolution
-- type (instrument type) - see mission type, dafult value is **imager**
+- type (instrument type) - see mission type, default value is **imager**
 
 
 
