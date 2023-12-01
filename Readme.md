@@ -1,4 +1,4 @@
-# Exodus Orbital SDK toolkit
+# Exodus Orbitals SDK toolkit
 
 ## Intro
 This repository contains the SDK to allow easier interaction with Exodus Orbitals's API. For more details about the API, refer to the **swagger file**.
